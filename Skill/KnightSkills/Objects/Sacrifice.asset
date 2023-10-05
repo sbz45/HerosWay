@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ad04df9dcee0f848aa5b7ef51de972b, type: 3}
+  m_Name: Sacrifice
+  m_EditorClassIdentifier: 
+  index: 4
+  icon: {fileID: 21300000, guid: 2b144e220e60e364fbb8b2c802a56ac5, type: 3}
+  cost: 2
+  skillCost: 
+  skillDescription: "\u6D88\u8017\u4E00\u534A\u7684\u7CBE\u795E\u503C\uFF0C\u9020\u6210\u7B49\u989D\u7684\u7CBE\u795E\u4F24\u5BB3"
+  skillName: "\u727A\u7272"
+  isSingle: 0

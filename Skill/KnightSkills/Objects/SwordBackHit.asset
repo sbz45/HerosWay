@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9d8dee1b07c1914fba897af5c33fb1a, type: 3}
+  m_Name: SwordBackHit
+  m_EditorClassIdentifier: 
+  index: 8
+  icon: {fileID: 0}
+  cost: 30
+  skillCost: 4
+  skillDescription: "\u5BF9\u654C\u65B9\u9020\u6210\uFF08175%*\u653B\u51FB\u529B\uFF09\u7269\u7406\u4F24\u5BB3\uFF1A\u6D88\u80175"
+  skillName: "\u5251\u80CC\u51FB"
+  isSingle: 0

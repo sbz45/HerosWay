@@ -1,0 +1,18 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+[CreateAssetMenu(fileName = "SpiritOfKingdom", menuName = "Skill/Knight/SpiritOfKingdom", order = 0)]
+[Serializable] public class SpiritOfKingdom : Skill
+{
+    public Buff buffHolyLight;
+    protected override void SkillBody(Character character)
+    {
+        skillAttackInstance.attacked = character;
+        character.DEFENCE++;
+        character.defence++;
+        skillAttackInstance.damagePhysical= character.attack + character.DEFENCE;
+        character.GetBuff(buffHolyLight);
+        character.GetBuff(buffHolyLight);
+        character.GetBuff(buffHolyLight);
+    }
+}

@@ -1,0 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+[CreateAssetMenu(fileName ="SteelWill",menuName = "Skill/Knight/SteelWill", order =0)]
+[Serializable] public class SteelWill : Skill
+{
+    
+    protected override void SkillBody(Character character)
+    {
+        /*character.GetBuff();*/
+        character.HealthChange((int)((character.HEALTH - character.health)*0.25)+15);
+        character.DefenceChange((int)((character.DEFENCE) * 0.5));
+        character.SansChange((int)(20));
+    }
+}
