@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.TextCore.Text;
 
+/// <summary>
+/// 用函数来替代invoke以获得Debug信息
+/// 登记事件有两种方法，分别对应持久登记和只执行一次的登记
+/// </summary>
 public class FightEventListener : MonoBehaviour
 {
     /// <summary>
@@ -33,6 +37,8 @@ public class FightEventListener : MonoBehaviour
     public static event Action<Dice, Character> OnDiceTrown;
     public static event Action<Character, Character> OnFightStart;
     public static event Action<Character, Character> OnFightEnd;
+    public static event Action<Character> OnCharacterLeaveStage;
+    public static event Action<Character> OnCharacterEnterStage;
 
 
     public static void ResetAllEvent()
@@ -46,6 +52,20 @@ public class FightEventListener : MonoBehaviour
         OnDiceTrown = null;
     }
     #region public invoke method
+    public static void CharacterLeaveStage(Character character)
+    {
+        Debug.Log("CharacterLeaveStage：" + character.ToString());
+        if (OnCharacterLeaveStage != null)
+            OnCharacterLeaveStage.Invoke( character);
+        /*//yield return WaitForCoroutines(OnCharacterTakingAttack.GetInvocationList());*/
+    }
+    public static void CharacterEnterStage(Character character)
+    {
+        Debug.Log("CharacterEnterStage：" + character.ToString());
+        if (OnCharacterEnterStage != null)
+            OnCharacterEnterStage.Invoke(character);
+        /*//yield return WaitForCoroutines(OnCharacterTakingAttack.GetInvocationList());*/
+    }
     public static void DiceTrown(Dice dice, Character character)
     {
         Debug.Log("DiceTrown" + dice.currentPoint.ToString());

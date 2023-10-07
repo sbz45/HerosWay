@@ -39,7 +39,7 @@ public class FightManager : MonoBehaviour
         return skillReleased.Contains(i);
             
     }
-    public IEnumerator FightStart()
+    public IEnumerator FightStart(List<Character> characters)
     {
         Debug.Log("fightStart");
         player = GameManager.instance.player;
@@ -48,6 +48,9 @@ public class FightManager : MonoBehaviour
         enemy.opponent = player;
         enemy.FightStartInitialization();
         player.FightStartInitialization();
+        foreach (var i in characters) FightEventListener.CharacterEnterStage(i);
+
+
         skillReleased.Clear();
         
         //fightPanelcontroller.CharacterUpdate();//���ﷸ��һ���ش�ʧ����ǰȥ���½�ɫ������fightpanel��û׼����
