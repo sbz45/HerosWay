@@ -75,7 +75,7 @@ public class FightManager : MonoBehaviour
             }
             yield return StartCoroutine(RoundEndHandeler(characterInAction));
             if(CheckFightEnd())yield break;
-            yield return  fightRoundHandler.GetNextToAction(characterInAction);
+            yield return  StartCoroutine( fightRoundHandler.GetNextToAction(characterInAction));
         }
     }
     #region roundStart

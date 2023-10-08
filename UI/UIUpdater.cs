@@ -27,7 +27,7 @@ public class UIUpdater : MonoBehaviour
     }
     public void UpdateStatusBar(Character character)
     {
-        statusBarController.UpdateState(character);
+        /*statusBarController.UpdateState(character);*/
     }
     
     public void UpdateDice(Dice dice)
