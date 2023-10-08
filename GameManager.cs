@@ -24,7 +24,10 @@ public class GameManager : MonoBehaviour
         this.player = player;
         this.enemy = enemy;
         fightManager.fightPanel.SetActive(true);
-        StartCoroutine( fightManager.FightStart());
+        List<Character> characters = new List<Character>();
+        characters.Add(player);
+        characters.Add(enemy);
+        StartCoroutine( fightManager.FightStart(characters));
 
     }
     public void FightEnd(Player player, Enemy enemy)
@@ -32,8 +35,8 @@ public class GameManager : MonoBehaviour
         isFighting = false;
         this.player = player;
         this.enemy = enemy;
-        fightManager.fightPanel.SetActive(true);
-        StartCoroutine(fightManager.FightStart());
+        fightManager.fightPanel.SetActive(false);
+        /*StartCoroutine(fightManager.FightStart());*/
 
     }
 
