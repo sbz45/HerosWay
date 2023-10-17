@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     }
     public void FightStart(Player player,Enemy enemy)
     {
+
         isFighting = true;
         this.player = player;
         this.enemy = enemy;
