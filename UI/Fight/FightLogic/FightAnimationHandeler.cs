@@ -20,33 +20,70 @@ public class FightAnimationHandeler : MonoBehaviour
 
     List<Animation> animationsToPlay = new List<Animation>();
     ObjectPool<Animation> objectPool = new UnityEngine.Pool.ObjectPool<Animation>(() => new Animation());
-    public void AddAnimation(AnimationType animationType, string value, bool ifWaitUntilEnd)
+    public void AddAnimation(AnimationType animationType, Character character,string value, bool ifWaitUntilEnd)
     {
         Animation animation = objectPool.Get();
-        animation.SetProperty(animationType, value, ifWaitUntilEnd);
+        animation.SetProperty(animationType,character, value, ifWaitUntilEnd);
         animationsToPlay.Add(animation);
         
     }
-    public void AddAnimation(AnimationType animationType, float value, bool ifWaitUntilEnd)
+    public void AddAnimation(AnimationType animationType, Character character,float value, bool ifWaitUntilEnd)
     {
         Animation animation = objectPool.Get();
-        animation.SetProperty(animationType, value, ifWaitUntilEnd);
+        animation.SetProperty(animationType, character,value, ifWaitUntilEnd);
         animationsToPlay.Add(animation);
 
     }
     public void PlayAnimations()
     {
+        event OnAnimationsEnd;
         foreach(var i in animationsToPlay)
         {
+            
+            if(i.WaitForCompletion)
+            {
             switch (i.animationType)
             {
-                case AnimationType.Attack:; StartCoroutine(AttackAnimation());break;
-                case AnimationType.Attacked:; ;break;
-                case AnimationType.TakeDamage:; ;break;
+                case AnimationType.Attack:
+                    ;
+                     yield return StartCoroutine(AttackAnimation());
+                     break;
+                case AnimationType.Attacked:
+                    ;
+                     yield return StartCoroutine(AttackedAnimation());;
+                     break;
+                case AnimationType.TakeDamage:
+                    ; 
+                    yield return StartCoroutine(AttackAnimation());;
+                    break;
 
             }
+            }else
+            {
+
+            switch (i.animationType)
+            {
+                case AnimationType.Attack:
+                    ;
+                     StartCoroutine(AttackAnimation());
+                     break;
+                case AnimationType.Attacked:
+                    ;
+                     StartCoroutine(AttackedAnimation());;
+                     break;
+                case AnimationType.TakeDamage:
+                    ; 
+                    StartCoroutine(AttackAnimation());;
+                    break;
+
+            }
+            }
+            
                 
         }
+        OnAnimationsEnd?.Invoke();
+        OnAnimationsEnd=null;
+        animationsToPlay.Clear();
     }
     internal void ShowAttackName(Attack attack)
     {
@@ -70,7 +107,7 @@ public class FightAnimationHandeler : MonoBehaviour
         
     }
     private bool atkAnimationPlaying= true;
-    public IEnumerator AttackAnimation(Attack attack)
+    public IEnumerator AttackAnimation( Character character,string attackName)
     {
         atkAnimationPlaying = true;
         FightAnimationHandeler.instance.ShowAttackName(attack);
@@ -80,7 +117,7 @@ public class FightAnimationHandeler : MonoBehaviour
             yield return FightPanelcontroller.playerImage.transform.DOPunchPosition(new Vector2(50, 0), 1, 1, (float)0.1, false).SetEase(Ease.Flash).WaitForCompletion();
             yield return waitFor1;
             atkAnimationPlaying = false;
-            yield return FightPanelcontroller.enemyImage.transform.DOPunchPosition(new Vector2(70, 0), 1, 5, (float)0.1, false).WaitForCompletion();
+            
         }
         else
         {
@@ -88,29 +125,29 @@ public class FightAnimationHandeler : MonoBehaviour
             yield return FightPanelcontroller.enemyImage.transform.DOPunchPosition(new Vector2(-50, 0), 1, 1, (float)0.1, false).SetEase(Ease.Flash).WaitForCompletion();
             yield return waitFor1;
             atkAnimationPlaying = false;
-            yield return FightPanelcontroller.playerImage.transform.DOPunchPosition(new Vector2(-70, 0), 1, 5, (float)0.1, false).WaitForCompletion();
+            
 
         }
 
         
         Debug.Log("AttackAnimationEnd");
-        StartCoroutine(AttackedAnimation(attack));
+        
     }
-    public IEnumerator AttackedAnimation(Attack attack)
+    public IEnumerator AttackedAnimation(Character character)
     {
        
         
-        if (attack.attacker.characterType != CharacterType.enemy)
+        if (character.characterType != CharacterType.enemy)
         {
             Debug.Log("AttackedAnimationPlayerStart");
            
-            yield return FightPanelcontroller.enemyImage.transform.DOPunchPosition(new Vector2(70, 0), 1, 5, (float)0.1, false).WaitForCompletion();
+            yield return FightPanelcontroller.enemyImage.transform.DOPunchPosition(new Vector2(70, 10), 1, 5, (float)0.1, false).WaitForCompletion();
         }
         else
         {
             Debug.Log("AttackedAnimationEnemyStart");
 
-            yield return FightPanelcontroller.playerImage.transform.DOPunchPosition(new Vector2(-70, 0), 1, 5, (float)0.1, false).WaitForCompletion();
+            yield return FightPanelcontroller.playerImage.transform.DOPunchPosition(new Vector2(-70, -10), 1, 5, (float)0.1, false).WaitForCompletion();
 
         }
 
@@ -162,28 +199,32 @@ public class FightAnimationHandeler : MonoBehaviour
 /// </summary>
 public class Animation 
 {
+    public Character character;
     public AnimationType animationType { get; private set; }
     public string svalue { get; private set; }
     public float fvalue { get; private set; }
     public bool isWaitUntilEnd { get; private set; }
-    public Animation(AnimationType animationType,string value,bool ifWaitUntilEnd)
+    public Animation(AnimationType animationType,Character character,string value,bool ifWaitUntilEnd)
     {
         this.animationType = animationType;
         this.svalue = value;
         this.isWaitUntilEnd = ifWaitUntilEnd;
+        this.character=character;
     }
     public Animation()
     {
 
     }
-    public void SetProperty(AnimationType animationType, string value, bool ifWaitUntilEnd)
+    public void SetProperty(AnimationType animationType,Character character, string value, bool ifWaitUntilEnd)
     {
+        this.character=character;
         this.animationType = animationType;
         this.svalue = value;
         this.isWaitUntilEnd = ifWaitUntilEnd;
     }
-    public void SetProperty(AnimationType animationType, float value, bool ifWaitUntilEnd)
+    public void SetProperty(AnimationType animationType,Character character, float value, bool ifWaitUntilEnd)
     {
+        this.character=character;
         this.animationType = animationType;
         this.fvalue = value;
         this.isWaitUntilEnd = ifWaitUntilEnd;
