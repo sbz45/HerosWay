@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
 
-    public Animator playerAnimator;
-    public PlayerAnimation playerAnimation;
+    public bool isControllable;
+     Animator playerAnimator;
+     PlayerAnimation playerAnimation;
     private Vector2 faceAt;
     public float raycastDistance;
     public float moveSpeed;
@@ -22,8 +23,9 @@ public class PlayerControl : MonoBehaviour
 
 
 
-    void Update()
+    void FixedUpdate()
     {
+        if(!isControllable)return;
         if (Input.GetKeyDown(KeyCode.A))
         {
             faceAt.x = -1;
@@ -152,6 +154,6 @@ public class PlayerControl : MonoBehaviour
         }
 
         rigidbody2D.MovePosition(rigidbody2D.position + moveDirection * moveSpeed * Time.deltaTime);
-
+    
     }
 }

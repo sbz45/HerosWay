@@ -42,22 +42,22 @@ public class FightAnimationHandeler : MonoBehaviour
             
             if(i.WaitForCompletion)
             {
-            switch (i.animationType)
-            {
-                case AnimationType.Attack:
-                    ;
-                     yield return StartCoroutine(AttackAnimation());
-                     break;
-                case AnimationType.Attacked:
-                    ;
-                     yield return StartCoroutine(AttackedAnimation());;
-                     break;
-                case AnimationType.TakeDamage:
-                    ; 
-                    yield return StartCoroutine(AttackAnimation());;
-                    break;
+                switch (i.animationType)
+                {
+                    case AnimationType.Attack:
+                        ;
+                        yield return StartCoroutine(AttackAnimation());
+                        break;
+                    case AnimationType.Attacked:
+                        ;
+                        yield return StartCoroutine(AttackedAnimation());;
+                        break;
+                    case AnimationType.TakeDamage:
+                        ; 
+                        yield return StartCoroutine(AttackAnimation());;
+                        break;
 
-            }
+                }
             }else
             {
 
@@ -65,17 +65,23 @@ public class FightAnimationHandeler : MonoBehaviour
             {
                 case AnimationType.Attack:
                     ;
-                     StartCoroutine(AttackAnimation());
+                     StartCoroutine(AttackAnimation(i.character,i.svalue));
                      break;
                 case AnimationType.Attacked:
                     ;
-                     StartCoroutine(AttackedAnimation());;
+                     StartCoroutine(AttackedAnimation(i.character));
                      break;
-                case AnimationType.TakeDamage:
+                case AnimationType.TakePhysicalDamage:
                     ; 
-                    StartCoroutine(AttackAnimation());;
+                    StartCoroutine(TakingPhysicalDamagenimation(i.value,i.character));
                     break;
-
+                 case AnimationType.TakeSpiritualDamage:
+                    ; 
+                    StartCoroutine(TakingSpiritualDamageAnimation(i.value,i.character));
+                    break;                   
+                case AnimationType.TakeEffect:
+                    StartCoroutine(TakeEffect(i.character,i.svalue));
+                    break;
             }
             }
             
@@ -99,32 +105,35 @@ public class FightAnimationHandeler : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        /* FightEventListener.OnCharacterDeliveringAttack += AttackAnimation;*/
+        FightEventListener.OnCharacterDeliveringAttack += (attack)=>StartCoroutine( AttackAnimation(attack.attacker,attack.attackName));
+        FightEventListener.OnCharacterTakingAttack += (attack)=>StartCoroutine( AttackedAnimation(attack.Attacked));
         /* FightEventListener.OnCharacterTakingPhysicalDamage += TakingPhysicalAttackAnimation;
          FightEventListener.OnCharacterTakingSpiritualDamage += TakingSpiritualAttackAnimation;*/
         FightEventListener.OnCharacterTakingPhysicalDamage += (damage, character) => StartCoroutine(TakingPhysicalAttackAnimation(damage, character) );
         FightEventListener.OnCharacterTakingSpiritualDamage += (damage, character) => StartCoroutine(TakingSpiritualAttackAnimation(damage, character)) ;
         
     }
-    private bool atkAnimationPlaying= true;
+    
     public IEnumerator AttackAnimation( Character character,string attackName)
     {
-        atkAnimationPlaying = true;
+        
         FightAnimationHandeler.instance.ShowAttackName(attack);
         if (attack.attacker.characterType != CharacterType.enemy)
         {
             Debug.Log("AttackAnimationPlayerStart");
-            yield return FightPanelcontroller.playerImage.transform.DOPunchPosition(new Vector2(50, 0), 1, 1, (float)0.1, false).SetEase(Ease.Flash).WaitForCompletion();
-            yield return waitFor1;
-            atkAnimationPlaying = false;
+            yield return FightPanelcontroller.playerImage.transform.
+            DOPunchPosition(new Vector2(50, 0), 1, 1, (float)0.1, false).SetEase(Ease.Flash).WaitForCompletion();
+            
+            
             
         }
         else
         {
             Debug.Log("AttackAnimationEnemyStart");
-            yield return FightPanelcontroller.enemyImage.transform.DOPunchPosition(new Vector2(-50, 0), 1, 1, (float)0.1, false).SetEase(Ease.Flash).WaitForCompletion();
-            yield return waitFor1;
-            atkAnimationPlaying = false;
+            yield return FightPanelcontroller.enemyImage.transform.
+            DOPunchPosition(new Vector2(-50, 0), 1, 1, (float)0.1, false).SetEase(Ease.Flash).WaitForCompletion();
+            
+            
             
 
         }
@@ -156,11 +165,7 @@ public class FightAnimationHandeler : MonoBehaviour
 
     }
     WaitUntil WaitUntilAttackedAnimaiton;
-    /// <summary>
-    /// starts if Attack animation is not playing
-    /// </summary>
-    /// <param name="damage"></param>
-    /// <param name="character"></param>
+
     public IEnumerator TakingPhysicalDamagenimation(int damage, Character character)
     {
         
@@ -188,7 +193,26 @@ public class FightAnimationHandeler : MonoBehaviour
         }
 
     }
+    public IEnumerator TakeEffect(Character character,string effectName)
+    {
+        ShowAttackName(effectName);
+        if (character.characterType != CharacterType.enemy)
+        {
+            Debug.Log("TakeEffectAnimationPlayerStart");
+           
+            yield return FightPanelcontroller.enemyImage.transform.
+            DOPunchPosition(new Vector2(10, 10), 1, 5, (float)0.1, false).WaitForCompletion();
+        }
+        else
+        {
+            Debug.Log("TakeEffectAnimationEnemyStart");
 
+            yield return FightPanelcontroller.playerImage.transform.
+            DOPunchPosition(new Vector2(-10, -10), 1, 5, (float)0.1, false).WaitForCompletion();
+
+        }
+        DisableAttackName();
+    }
 
 }
 /// <summary>
@@ -233,7 +257,9 @@ public class Animation
 public enum AnimationType{
     Attack,
     Attacked,
-    TakeDamage
+    TakePhysicalDamage,
+    TakeSpiritualDamage,
+    TakeEffect 
 }
 
 

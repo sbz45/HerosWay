@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public bool isFighting;
     public Enemy enemy;
     public FightManager fightManager;
+    
     [SerializeField] StageCurtain StageCurtain;
     public UIUpdater UIUpdater;
     private void Awake()
